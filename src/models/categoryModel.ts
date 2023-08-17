@@ -30,4 +30,11 @@ export default class CategoryModel {
     })
     return category
   }
+
+  async delete(id: number) {
+    await prisma.category.delete({
+      where: { id }
+    })
+    return this.getAll()
+  }
 }
