@@ -1,11 +1,14 @@
 import { Router } from "express";
+import CategoryController from "../controllers/categoriesController";
 
 const categoriesRoutes = Router();
 
-categoriesRoutes.get("/", (_, res) => {});
-categoriesRoutes.get("/:id", (_, res) => {});
-categoriesRoutes.post("/", (_, res) => {});
-categoriesRoutes.put("/:id", (_, res) => {});
-categoriesRoutes.delete("/:id", (_, res) => {});
+const categoryController = new CategoryController();
+
+categoriesRoutes.get("/", categoryController.getAll);
+categoriesRoutes.get("/:id", categoryController.getById);
+categoriesRoutes.post("/", categoryController.create);
+categoriesRoutes.put("/:id", categoryController.update);
+categoriesRoutes.delete("/:id", categoryController.delete);
 
 export default categoriesRoutes;
