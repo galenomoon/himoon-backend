@@ -30,7 +30,7 @@ model Category {
 
 model Product {
   id          Int      @id @default(autoincrement())
-  name        String   @unique
+  name        String
   description String
   price       Float
   images      String[]
