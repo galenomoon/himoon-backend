@@ -8,7 +8,7 @@ const productModel = new ProductModel()
 const categoryModel = new CategoryModel()
 
 export default class ProductUseCase {
-  
+
   async getAll() {
     return await productModel.getAll()
   }
@@ -19,37 +19,39 @@ export default class ProductUseCase {
     return product
   }
 
-  async create({ name, description, price, images, category_id }: Product) {
+  async create(product: Product) {
    
-    hasAllRequiredKeys({ name, description, price, category_id })
+    hasAllRequiredKeys(product)
 
-    if (!Array.isArray(images)) {
+    if (!Array.isArray(product.images)) {
       throw new AppError("images must be an array");
     }
 
-    const is_category_id_valid = await categoryModel.getById(category_id)
+    const is_category_id_valid = await categoryModel.getById(product.category_id)
 
     if (!is_category_id_valid) {
       throw new AppError("Category not found", 404)
     }
 
-    return await productModel.create({ name, description, price, images, category_id })
+    return await productModel.create(product)
   }
 
-  async update(id: number, { name, description, price, images, category_id }: Product) {
+  async update(id: number, product: Product) {
     
-    hasAllRequiredKeys({ name, description, price, category_id })
+    hasAllRequiredKeys(product)
 
-    const is_category_id_valid = await categoryModel.getById(category_id)
+    const is_category_id_valid = await categoryModel.getById(product.category_id)
 
     if (!is_category_id_valid) {
       throw new AppError("Category not found", 404)
     }
 
-    return await productModel.update(id, { name, description, price, images, category_id })
+    return await productModel.update(id, product)
   }
 
   async delete(id: number) {
+    const product = await productModel.getById(id)
+    if (!product) throw new AppError("Product not found", 404)
     return await productModel.delete(id)
   }
 }
