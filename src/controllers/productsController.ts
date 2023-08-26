@@ -34,4 +34,11 @@ export default class ProductController {
     const products = await productUseCase.delete(Number(id))
     return res.status(200).json(products)
   }
+
+  async getByCategory(req: Request, res: Response) {
+    const { q: name } = req.query
+    const { category_id } = req.params
+    const products = await productUseCase.getByCategory(Number(category_id), String(name))
+    return res.status(200).json(products)
+  }
 }

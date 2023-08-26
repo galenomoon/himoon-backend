@@ -38,4 +38,21 @@ export default class ProductModel {
     })
     return this.getAll()
   }
+
+  async getByCategory(category_id: number, name: string) {
+    if (!name) return await prisma.product.findMany({
+      where: { category_id }
+    })
+
+    const products = await prisma.product.findMany({
+      where: {
+        category_id,
+        name: {
+          contains: name,
+          mode: 'insensitive'
+        }
+      }
+    })
+    return products
+  }
 }

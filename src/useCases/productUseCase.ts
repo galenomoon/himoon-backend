@@ -54,4 +54,10 @@ export default class ProductUseCase {
     if (!product) throw new AppError("Product not found", 404)
     return await productModel.delete(id)
   }
+
+  async getByCategory(category_id: number, name: string) {
+    if (!category_id) throw new AppError("category_id is required", 400)
+    const products = await productModel.getByCategory(category_id, name)
+    return products
+  }
 }
