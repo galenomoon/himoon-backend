@@ -1,7 +1,9 @@
 import { Category } from "../interfaces/category";
 import { PrismaClient } from "@prisma/client";
+import ProductModel from "./productModel";
 
 const prisma = new PrismaClient();
+const productModel = new ProductModel()
 
 export default class CategoryModel {
 
@@ -33,9 +35,15 @@ export default class CategoryModel {
   }
 
   async delete(id: number) {
+
+    await prisma.product.deleteMany({
+      where: { category_id: id }
+    })
+
     await prisma.category.delete({
       where: { id }
     })
+
     return this.getAll()
   }
 }
