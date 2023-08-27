@@ -60,4 +60,9 @@ export default class ProductUseCase {
     const products = await productModel.getByCategory(category_id, name)
     return products
   }
+
+  async getByName(name: string){
+    const products = await productModel.getByName(name)
+    return products
+  }
 }

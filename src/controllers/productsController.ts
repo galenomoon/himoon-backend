@@ -41,4 +41,10 @@ export default class ProductController {
     const products = await productUseCase.getByCategory(Number(category_id), String(name))
     return res.status(200).json(products)
   }
+
+  async getByName(req: Request, res: Response){
+    const { q: name } = req.query
+    const products = await productUseCase.getByName(String(name))
+    return res.status(200).json(products)
+  }
 }

@@ -55,4 +55,21 @@ export default class ProductModel {
     })
     return products
   }
+
+  async getByName(name: string) {
+    if (!name) {
+      const products = this.getAll()
+      return products
+    }
+
+    const products = await prisma.product.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive'
+        }
+      }
+    })
+    return products
+  }
 }
