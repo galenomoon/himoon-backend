@@ -17,6 +17,7 @@ export default class CategoryUseCase {
 
   async create({ name }: Category) {
     if (!name) throw new AppError("Name is required")
+    if (await categoryModel.getByName(name)) throw new AppError("Category already exists", 409)
     return await categoryModel.create({ name })
   }
 

@@ -35,6 +35,13 @@ export default class CategoryModel {
     })
   }
 
+  async getByName(name: string) {
+    const category = await prisma.category.findUnique({
+      where: { name }
+    })
+    return category
+  }
+
   async update(id: number, { name }: Category) {
     const category = await prisma.category.update({
       where: { id },
