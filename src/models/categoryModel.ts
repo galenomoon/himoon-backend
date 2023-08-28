@@ -1,9 +1,7 @@
 import { Category } from "../interfaces/category";
 import { PrismaClient } from "@prisma/client";
-import ProductModel from "./productModel";
 
 const prisma = new PrismaClient();
-const productModel = new ProductModel()
 
 export default class CategoryModel {
 
