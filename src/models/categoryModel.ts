@@ -19,9 +19,20 @@ export default class CategoryModel {
 
   async create({ name }: Category) {
     const category = await prisma.category.create({
-      data: { name }
+      data: { name, quantityProducts: 0 }
     })
     return category
+  }
+
+  async updateCategoryCount(id: number) {
+    const productsLength = await prisma.product.count({
+      where: { category_id: id }
+    })
+
+    await prisma.category.update({
+      where: { id },
+      data: { quantityProducts: productsLength }
+    })
   }
 
   async update(id: number, { name }: Category) {

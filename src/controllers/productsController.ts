@@ -18,8 +18,8 @@ export default class ProductController {
 
   async create(req: Request, res: Response) {
     const { name, description, price, images, category_id } = req.body
-    const newCategory = await productUseCase.create({ name, description, price, images, category_id })
-    return res.status(201).json(newCategory)
+    const newProduct = await productUseCase.create({ name, description, price, images, category_id })
+    return res.status(201).json(newProduct)
   }
 
   async update(req: Request, res: Response) {

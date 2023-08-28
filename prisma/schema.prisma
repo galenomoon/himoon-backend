@@ -21,11 +21,12 @@ model User {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  products  Product[]
+  id               Int      @id @default(autoincrement())
+  name             String   @unique
+  quantityProducts Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  products         Product[]
 }
 
 model Product {
