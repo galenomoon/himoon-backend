@@ -8,7 +8,7 @@ const categoryModel = new CategoryModel()
 export default class ProductModel {
 
   async getAll() {
-    const products = await prisma.product.findMany();
+    const products = await prisma.product.findMany({ orderBy: { id: 'asc' } });
     return products;
   }
 
@@ -50,6 +50,7 @@ export default class ProductModel {
     })
 
     const products = await prisma.product.findMany({
+      orderBy: { id: 'asc' },
       where: {
         category_id,
         name: {

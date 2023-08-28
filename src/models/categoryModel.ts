@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export default class CategoryModel {
 
   async getAll() {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.category.findMany({ orderBy: { id: 'asc' } });
     return categories;
   }
 
