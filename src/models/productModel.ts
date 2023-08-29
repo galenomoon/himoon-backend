@@ -7,8 +7,17 @@ const categoryModel = new CategoryModel()
 
 export default class ProductModel {
 
-  async getAll() {
-    const products = await prisma.product.findMany({ orderBy: { id: 'asc' } });
+  async getAll(name?: string) {
+    if (!name) return await prisma.product.findMany({ orderBy: { id: 'asc' } });
+
+    const products = await prisma.product.findMany({
+      where: {
+        name: {
+          contains: name,
+          mode: 'insensitive'
+        }
+      }
+    })
     return products;
   }
 
@@ -53,23 +62,6 @@ export default class ProductModel {
       orderBy: { id: 'asc' },
       where: {
         category_id,
-        name: {
-          contains: name,
-          mode: 'insensitive'
-        }
-      }
-    })
-    return products
-  }
-
-  async getByName(name: string) {
-    if (!name) {
-      const products = this.getAll()
-      return products
-    }
-
-    const products = await prisma.product.findMany({
-      where: {
         name: {
           contains: name,
           mode: 'insensitive'

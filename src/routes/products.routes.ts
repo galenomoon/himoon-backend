@@ -15,6 +15,5 @@ productsRoutes.delete("/:id", productController.delete);
 
 //CUSTOM ROUTES 
 productsRoutes.get("/category/:category_id", productController.getByCategory);
-productsRoutes.get("/search/name", productController.getByName);
 
 export default productsRoutes;

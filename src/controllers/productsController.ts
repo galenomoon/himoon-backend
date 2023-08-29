@@ -5,8 +5,9 @@ const productUseCase = new ProductUseCase()
 
 export default class ProductController {
 
-  async getAll(_: Request, res: Response) {
-    const products = await productUseCase.getAll()
+  async getAll(req: Request, res: Response) {
+    const { q: name } = req.query
+    const products = await productUseCase.getAll(String(name))
     return res.status(200).json(products)
   }
 
@@ -39,12 +40,6 @@ export default class ProductController {
     const { q: name } = req.query
     const { category_id } = req.params
     const products = await productUseCase.getByCategory(Number(category_id), String(name))
-    return res.status(200).json(products)
-  }
-
-  async getByName(req: Request, res: Response){
-    const { q: name } = req.query
-    const products = await productUseCase.getByName(String(name))
     return res.status(200).json(products)
   }
 }

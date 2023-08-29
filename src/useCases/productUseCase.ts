@@ -9,8 +9,8 @@ const categoryModel = new CategoryModel()
 
 export default class ProductUseCase {
 
-  async getAll() {
-    return await productModel.getAll()
+  async getAll(name: string) {
+    return await productModel.getAll(name)
   }
 
   async getById(id: number) {
@@ -20,7 +20,7 @@ export default class ProductUseCase {
   }
 
   async create(product: Product) {
-   
+
     hasAllRequiredKeys(product)
 
     if (!Array.isArray(product.images)) {
@@ -37,7 +37,7 @@ export default class ProductUseCase {
   }
 
   async update(id: number, product: Product) {
-    
+
     hasAllRequiredKeys(product)
 
     const is_category_id_valid = await categoryModel.getById(product.category_id)
@@ -58,11 +58,6 @@ export default class ProductUseCase {
   async getByCategory(category_id: number, name: string) {
     if (!category_id) throw new AppError("category_id is required", 400)
     const products = await productModel.getByCategory(category_id, name)
-    return products
-  }
-
-  async getByName(name: string){
-    const products = await productModel.getByName(name)
     return products
   }
 }
