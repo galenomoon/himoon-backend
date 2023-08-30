@@ -19,5 +19,15 @@ export default class UserModel {
     return user;
   }
 
+  async getById(id: number) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+    return {
+      id: user?.id,
+      username: user?.username,
+      email: user?.email,
+    }
+  }
   
 }

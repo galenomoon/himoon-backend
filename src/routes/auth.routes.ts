@@ -1,11 +1,12 @@
 import { Router } from "express";
 import AuthController from "../controllers/authController";
+import { authenticateToken } from "../middlewares/authMiddleware";
 
 const authRoutes = Router();
 
 const authController = new AuthController();
 
-authRoutes.get("/", (_, res) => res.status(200).json({ message: "OK!" }));
+authRoutes.get("/current_user", authenticateToken, authController.currentUser)
 authRoutes.post("/login", authController.login)
 authRoutes.post("/register", authController.register)
 

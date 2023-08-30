@@ -25,4 +25,10 @@ export default class AuthUseCase {
     const token = generateToken({ id: user.id, email: user.email })
     return { token }
   }
+
+  async currentUser(id: number) {
+    const user = await userModel.getById(id)
+    if (!user) throw new AppError("User not found", 404)
+    return user
+  }
 }

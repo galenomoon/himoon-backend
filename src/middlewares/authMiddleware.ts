@@ -13,8 +13,8 @@ export const authenticateToken = (req: any, res: any, next: any) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
-
-    req.userId = decoded.userId;
+    
+    req.currentUserId = decoded.id;
     next();
   });
 };
