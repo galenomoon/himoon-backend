@@ -1,0 +1,30 @@
+const categories = [
+  'Canetas',
+  'Lápis',
+  'Cadernos',
+  'Agendas',
+  'Bloco de notas',
+  'Post-it',
+  'Marcadores',
+  'Fitas adesivas',
+  'Clips',
+  'Grampeadores',
+  'Furadores',
+  'Estojos',
+  'Pastas',
+  'Organizadores',
+  'Calculadoras',
+  'Réguas',
+  'Tesouras',
+  'Colas',
+  'Corretivos',
+  'Pincéis',
+  'Quadros',
+  'Papéis',
+  'Envelopes',
+  'Etiquetas',
+  'Carimbos',
+  'Mochila'
+]
+
+export default categories
