@@ -27,9 +27,9 @@ export default class ProductUseCase {
       throw new AppError("images must be an array");
     }
 
-    const is_category_id_valid = await categoryModel.getById(product.category_id)
+    const isCategoryIdValid = await categoryModel.getById(product.categoryId)
 
-    if (!is_category_id_valid) {
+    if (!isCategoryIdValid) {
       throw new AppError("Category not found", 404)
     }
 
@@ -40,9 +40,9 @@ export default class ProductUseCase {
 
     hasAllRequiredKeys(product)
 
-    const is_category_id_valid = await categoryModel.getById(product.category_id)
+    const isCategoryIdValid = await categoryModel.getById(product.categoryId)
 
-    if (!is_category_id_valid) {
+    if (!isCategoryIdValid) {
       throw new AppError("Category not found", 404)
     }
 
@@ -55,9 +55,9 @@ export default class ProductUseCase {
     return await productModel.delete(id)
   }
 
-  async getByCategory(category_id: number, name: string) {
-    if (!category_id) throw new AppError("category_id is required", 400)
-    const products = await productModel.getByCategory(category_id, name)
+  async getByCategory(categoryId: number, name: string) {
+    if (!categoryId) throw new AppError("categoryId is required", 400)
+    const products = await productModel.getByCategory(categoryId, name)
     return products
   }
 }

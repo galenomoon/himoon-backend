@@ -18,15 +18,15 @@ export default class ProductController {
   }
 
   async create(req: Request, res: Response) {
-    const { name, description, price, images, category_id } = req.body
-    const newProduct = await productUseCase.create({ name, description, price, images, category_id })
+    const { name, description, price, images, categoryId } = req.body
+    const newProduct = await productUseCase.create({ name, description, price, images, categoryId })
     return res.status(201).json(newProduct)
   }
 
   async update(req: Request, res: Response) {
     const { id } = req.params
-    const { name, description, price, images, category_id } = req.body
-    const product = await productUseCase.update(Number(id), { name, description, price, images, category_id })
+    const { name, description, price, images, categoryId } = req.body
+    const product = await productUseCase.update(Number(id), { name, description, price, images, categoryId })
     return res.status(200).json(product)
   }
 
@@ -38,8 +38,8 @@ export default class ProductController {
 
   async getByCategory(req: Request, res: Response) {
     const { q: name } = req.query
-    const { category_id } = req.params
-    const products = await productUseCase.getByCategory(Number(category_id), String(name))
+    const { categoryId } = req.params
+    const products = await productUseCase.getByCategory(Number(categoryId), String(name))
     return res.status(200).json(products)
   }
 }

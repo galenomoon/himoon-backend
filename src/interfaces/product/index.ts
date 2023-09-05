@@ -5,5 +5,5 @@ export interface Product {
   description: string;
   price: number;
   images: string[];
-  category_id: number;
+  categoryId: number;
 }

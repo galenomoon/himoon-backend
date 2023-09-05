@@ -39,7 +39,7 @@ export default class CategoryModel {
 
   async updateCategoryCount(id: number) {
     const productsLength = await prisma.product.count({
-      where: { category_id: id },
+      where: { categoryId: id },
     });
 
     await prisma.category.update({
@@ -65,7 +65,7 @@ export default class CategoryModel {
 
   async delete(id: number) {
     await prisma.product.deleteMany({
-      where: { category_id: id },
+      where: { categoryId: id },
     });
 
     await prisma.category.delete({

@@ -14,6 +14,6 @@ productsRoutes.put("/:id", authenticateToken, productController.update);
 productsRoutes.delete("/:id", authenticateToken, productController.delete);
 
 //CUSTOM ROUTES 
-productsRoutes.get("/category/:category_id", productController.getByCategory);
+productsRoutes.get("/category/:categoryId", productController.getByCategory);
 
 export default productsRoutes;

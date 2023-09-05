@@ -49,11 +49,11 @@ async function seed() {
       const currentCategory = (await category)
       adjectives.forEach(async (adjective) => {
         await productModel.create({
-          name: `${adjective} ${currentCategory.name}`,
-          description: `Um produto MUITO${adjective}, realmente o ${currentCategory.name} é o melhor produto de todos os tempos`,
+          name: `${currentCategory.name} ${adjective}`,
+          description: `Um produto MUITO ${adjective}, realmente o ${currentCategory.name} é o melhor produto de todos os tempos`,
           price: Math.floor(Math.random() * 1000),
           images: [''],
-          category_id: Number(currentCategory.id),
+          categoryId: Number(currentCategory.id),
         });
       });
     });
