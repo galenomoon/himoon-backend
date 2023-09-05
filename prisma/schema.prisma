@@ -24,7 +24,7 @@ model Category {
   id               Int      @id @default(autoincrement())
   name             String   @unique
   quantityProducts Int
-  categorySlug     String   @unique
+  slug             String   @unique
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   products         Product[]

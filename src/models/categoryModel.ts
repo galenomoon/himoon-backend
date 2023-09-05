@@ -13,9 +13,7 @@ export default class CategoryModel {
       return categories;
     }
     const categories = await prisma.category.findUnique({
-      where: {
-        categorySlug: slug,
-      },
+      where: { slug },
     });
 
     return categories;
@@ -33,7 +31,7 @@ export default class CategoryModel {
       data: {
         name,
         quantityProducts: 0,
-        categorySlug: name.toLowerCase().replace(/ /g, "-"),
+        slug: name.toLowerCase().replace(/ /g, "-"),
       },
     });
     return category;
