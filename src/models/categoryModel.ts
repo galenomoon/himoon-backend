@@ -4,9 +4,20 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default class CategoryModel {
+  async getAll(slug?: string | undefined, sortBy?: string | undefined) {
 
-  async getAll() {
-    const categories = await prisma.category.findMany({ orderBy: { id: 'asc' } });
+    if (!slug) {
+      const categories = await prisma.category.findMany({
+        orderBy: { [sortBy || "id"]: "asc" }
+      });
+      return categories;
+    }
+    const categories = await prisma.category.findUnique({
+      where: {
+        categorySlug: slug,
+      },
+    });
+
     return categories;
   }
 
@@ -19,47 +30,50 @@ export default class CategoryModel {
 
   async create({ name }: Category) {
     const category = await prisma.category.create({
-      data: { name, quantityProducts: 0 }
-    })
-    return category
+      data: {
+        name,
+        quantityProducts: 0,
+        categorySlug: name.toLowerCase().replace(/ /g, "-"),
+      },
+    });
+    return category;
   }
 
   async updateCategoryCount(id: number) {
     const productsLength = await prisma.product.count({
-      where: { category_id: id }
-    })
+      where: { category_id: id },
+    });
 
     await prisma.category.update({
       where: { id },
-      data: { quantityProducts: productsLength }
-    })
+      data: { quantityProducts: productsLength },
+    });
   }
 
   async getByName(name: string) {
     const category = await prisma.category.findUnique({
-      where: { name }
-    })
-    return category
+      where: { name },
+    });
+    return category;
   }
 
   async update(id: number, { name }: Category) {
     const category = await prisma.category.update({
       where: { id },
-      data: { name }
-    })
-    return category
+      data: { name },
+    });
+    return category;
   }
 
   async delete(id: number) {
-
     await prisma.product.deleteMany({
-      where: { category_id: id }
-    })
+      where: { category_id: id },
+    });
 
     await prisma.category.delete({
-      where: { id }
-    })
+      where: { id },
+    });
 
-    return this.getAll()
+    return this.getAll();
   }
 }

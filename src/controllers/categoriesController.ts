@@ -5,8 +5,9 @@ const categoryUseCase = new CategoryUseCase()
 
 export default class CategoryController {
 
-  async getAll(_: Request, res: Response) {
-    const categories = await categoryUseCase.getAll()
+  async getAll(req: Request, res: Response) {
+    const { slug, sortBy } = req.query
+    const categories = await categoryUseCase.getAll(slug as undefined, sortBy as undefined)
     return res.status(200).json(categories)
   }
 
