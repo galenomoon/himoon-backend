@@ -6,7 +6,14 @@ const prisma = new PrismaClient();
 const categoryModel = new CategoryModel();
 
 export default class ProductModel {
-  async getAll(name?: string) {
+  async getAll(name?: string | undefined, slug?: string | undefined) {
+    if (slug) {
+      return await prisma.product.findUnique({
+        where: { slug },
+        include: { category: true },
+      });
+    }
+
     if (!name)
       return await prisma.product.findMany({
         orderBy: { id: "asc" },
@@ -15,7 +22,7 @@ export default class ProductModel {
         },
       });
 
-    const products = await prisma.product.findMany({
+    return await prisma.product.findMany({
       where: {
         name: {
           contains: name,
@@ -26,8 +33,6 @@ export default class ProductModel {
         category: true,
       },
     });
-
-    return products;
   }
 
   async getById(id: number) {
@@ -39,7 +44,14 @@ export default class ProductModel {
 
   async create({ name, description, price, images, categoryId }: Product) {
     const product = await prisma.product.create({
-      data: { name, description, price, images, categoryId },
+      data: {
+        name,
+        description,
+        price,
+        images,
+        categoryId,
+        slug: name.toLowerCase().replace(/ /g, "-"),
+      },
     });
 
     await categoryModel.updateCategoryCount(product.categoryId);
@@ -65,21 +77,41 @@ export default class ProductModel {
     return this.getAll();
   }
 
-  async getByCategory(categoryId: number, name: string) {
+  async getByCategoryId(categoryId: number | string, name: string) {
     if (!name)
       return await prisma.product.findMany({
-        where: { categoryId },
+        where: { categoryId: Number(categoryId) },
+        include: { category: true },
       });
 
     const products = await prisma.product.findMany({
       orderBy: { id: "asc" },
+      include: { category: true },
       where: {
-        categoryId,
+        categoryId: Number(categoryId),
         name: {
           contains: name,
           mode: "insensitive",
         },
       },
+    });
+    return products;
+  }
+
+  async getByCategorySlug(categorySlug: string, name: string) {
+    const category = await prisma.category.findUnique({
+      where: { slug: categorySlug as string },
+    });
+    if (!category) return null;
+    const products = await prisma.product.findMany({
+      where: {
+        categoryId: category.id,
+        name: {
+          contains: name,
+          mode: "insensitive",
+        },
+      },
+      include: { category: true },
     });
     return products;
   }
