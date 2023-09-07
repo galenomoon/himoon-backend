@@ -8,8 +8,8 @@ const productModel = new ProductModel();
 const categoryModel = new CategoryModel();
 
 export default class ProductUseCase {
-  async getAll(name: string, slug?: string) {
-    const products = await productModel.getAll(name, slug);
+  async getAll(name?: string, slug?: string, quantity?: number) {
+    const products = await productModel.getAll(name, slug, quantity);
     if (!products) throw new AppError("Product not found", 404);
     return products;
   }

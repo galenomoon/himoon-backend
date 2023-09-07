@@ -5,10 +5,11 @@ const productUseCase = new ProductUseCase();
 
 export default class ProductController {
   async getAll(req: Request, res: Response) {
-    const { q: name, slug } = req.query;
+    const { q: name, slug, quantity } = req.query;
     const products = await productUseCase.getAll(
-      String(name),
-      slug as undefined
+      name as undefined,
+      slug as undefined,
+      Number(quantity)
     );
     return res.status(200).json(products);
   }

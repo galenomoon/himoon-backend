@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const categoryModel = new CategoryModel();
 
 export default class ProductModel {
-  async getAll(name?: string | undefined, slug?: string | undefined) {
+  async getAll(name?: string, slug?: string, quantity?: number) {
     if (slug) {
       return await prisma.product.findUnique({
         where: { slug },
@@ -14,12 +14,13 @@ export default class ProductModel {
       });
     }
 
-    if (!name)
+    if (!name?.trim())
       return await prisma.product.findMany({
         orderBy: { id: "asc" },
         include: {
           category: true,
         },
+        take: quantity || undefined,
       });
 
     return await prisma.product.findMany({
