@@ -78,7 +78,7 @@ export default class ProductModel {
     return this.getAll();
   }
 
-  async getByCategoryId(categoryId: number | string, name: string) {
+  async getByCategoryId(categoryId: number | string, name: string | undefined) {
     if (!name)
       return await prisma.product.findMany({
         where: { categoryId: Number(categoryId) },
@@ -99,12 +99,22 @@ export default class ProductModel {
     return products;
   }
 
-  async getByCategorySlug(categorySlug: string, name: string) {
+  async getByCategorySlug(categorySlug: string, name: string | undefined) {
+
     const category = await prisma.category.findUnique({
       where: { slug: categorySlug as string },
     });
+    
     if (!category) return null;
-    const products = await prisma.product.findMany({
+
+    if (!name) {
+      return await prisma.product.findMany({
+        where: { categoryId: category.id },
+        include: { category: true },
+      });
+    }
+
+    return await prisma.product.findMany({
       where: {
         categoryId: category.id,
         name: {
@@ -114,6 +124,5 @@ export default class ProductModel {
       },
       include: { category: true },
     });
-    return products;
   }
 }

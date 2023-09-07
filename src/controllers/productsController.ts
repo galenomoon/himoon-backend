@@ -58,14 +58,14 @@ export default class ProductController {
     if (isNaN(Number(categoryIdOrSlug))) {
       const products = await productUseCase.getByCategorySlug(
         categoryIdOrSlug,
-        String(name)
+        name as undefined
       );
       return res.status(200).json(products);
     }
 
     const products = await productUseCase.getByCategoryId(
       Number(categoryIdOrSlug),
-      String(name)
+      name as undefined
     );
     return res.status(200).json(products);
   }

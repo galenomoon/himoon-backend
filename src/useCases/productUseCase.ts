@@ -54,7 +54,7 @@ export default class ProductUseCase {
     return await productModel.delete(id);
   }
 
-  async getByCategoryId(categoryId: number, name: string) {
+  async getByCategoryId(categoryId: number, name: string | undefined) {
     if (!categoryId) throw new AppError("categoryId is required", 400);
 
     const isCategoryIdValid = await categoryModel.getById(categoryId);
@@ -67,7 +67,7 @@ export default class ProductUseCase {
     return products;
   }
 
-  async getByCategorySlug(categorySlug: string, name: string) {
+  async getByCategorySlug(categorySlug: string, name: string | undefined) {
     if (!categorySlug) throw new AppError("categorySlug is required", 400);
     const products = await productModel.getByCategorySlug(categorySlug, name);
     if (products === null) throw new AppError("Category not found", 404);
