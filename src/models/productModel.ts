@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const categoryModel = new CategoryModel();
 
 export default class ProductModel {
-  async getAll(name?: string, quantity?: number, page?: number) {
+  async getAll(name?: string, quantity?: number) {
     if (!name?.trim()) {
       const allProducts = await prisma.product.findMany({
         orderBy: { id: "asc" },

@@ -3,15 +3,16 @@ import CategoryModel from "../models/categoryModel";
 import { Product } from "../interfaces/product";
 import { AppError } from "../errors/appError";
 import { hasAllRequiredKeys } from "../errors/hasAllRequiredKeys";
+import { paginatedResults } from "../utils/paginatedResults";
 
 const productModel = new ProductModel();
 const categoryModel = new CategoryModel();
 
 export default class ProductUseCase {
   async getAll(name?: string, quantity?: number, page?: number) {
-    const products = await productModel.getAll(name, quantity, page);
+    const products = await productModel.getAll(name, quantity);
     if (!products) throw new AppError("Product not found", 404);
-    return products;
+    return paginatedResults(page, products as []);
   }
 
   async create(product: Product) {
