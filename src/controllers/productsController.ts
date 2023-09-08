@@ -5,19 +5,25 @@ const productUseCase = new ProductUseCase();
 
 export default class ProductController {
   async getAll(req: Request, res: Response) {
-    const { q: name, slug, quantity } = req.query;
+    const { q: name, quantity, page } = req.query;
     const products = await productUseCase.getAll(
       name as undefined,
-      slug as undefined,
-      Number(quantity)
+      Number(quantity),
+      Number(page)
     );
     return res.status(200).json(products);
   }
 
-  async getById(req: Request, res: Response) {
-    const { id } = req.params;
-    const product = await productUseCase.getById(Number(id));
-    return res.status(200).json(product);
+  async getByIdOrSlug(req: Request, res: Response) {
+    const { idOrSlug } = req.params;
+    const isSlug = isNaN(Number(idOrSlug));
+    if (isSlug) {
+      const productsBySlug = await productUseCase.getBySlug(idOrSlug);
+      return res.status(200).json(productsBySlug);
+    }
+
+    const productsById = await productUseCase.getById(Number(idOrSlug));
+    return res.status(200).json(productsById);
   }
 
   async create(req: Request, res: Response) {
@@ -54,8 +60,9 @@ export default class ProductController {
   async getByCategory(req: Request, res: Response) {
     const { q: name } = req.query;
     const { categoryIdOrSlug } = req.params;
+    const isSlug = isNaN(Number(categoryIdOrSlug));
 
-    if (isNaN(Number(categoryIdOrSlug))) {
+    if (isSlug) {
       const products = await productUseCase.getByCategorySlug(
         categoryIdOrSlug,
         name as undefined

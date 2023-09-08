@@ -8,16 +8,10 @@ const productModel = new ProductModel();
 const categoryModel = new CategoryModel();
 
 export default class ProductUseCase {
-  async getAll(name?: string, slug?: string, quantity?: number) {
-    const products = await productModel.getAll(name, slug, quantity);
+  async getAll(name?: string, quantity?: number, page?: number) {
+    const products = await productModel.getAll(name, quantity, page);
     if (!products) throw new AppError("Product not found", 404);
     return products;
-  }
-
-  async getById(id: number) {
-    const product = await productModel.getById(id);
-    if (!product) throw new AppError("Product not found", 404);
-    return product;
   }
 
   async create(product: Product) {
@@ -52,6 +46,20 @@ export default class ProductUseCase {
     const product = await productModel.getById(id);
     if (!product) throw new AppError("Product not found", 404);
     return await productModel.delete(id);
+  }
+
+  async getBySlug(slug: string) {
+    if (!slug) throw new AppError("slug is required", 400);
+    const product = await productModel.getBySlug(slug);
+    if (!product) throw new AppError("Product not found", 404);
+    return product;
+  }
+
+  async getById(id: number) {
+    if (!id) throw new AppError("id is required", 400);
+    const product = await productModel.getById(id);
+    if (!product) throw new AppError("Product not found", 404);
+    return product;
   }
 
   async getByCategoryId(categoryId: number, name: string | undefined) {

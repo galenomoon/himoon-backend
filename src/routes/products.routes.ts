@@ -8,7 +8,7 @@ const productController = new ProductController();
 
 //REST
 productsRoutes.get("/", productController.getAll);
-productsRoutes.get("/:id", productController.getById);
+productsRoutes.get("/:idOrSlug", productController.getByIdOrSlug);
 productsRoutes.post("/", authenticateToken, productController.create);
 productsRoutes.put("/:id", authenticateToken, productController.update);
 productsRoutes.delete("/:id", authenticateToken, productController.delete);
