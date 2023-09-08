@@ -58,21 +58,23 @@ export default class ProductController {
   }
 
   async getByCategory(req: Request, res: Response) {
-    const { q: name } = req.query;
+    const { q: name, page } = req.query;
     const { categoryIdOrSlug } = req.params;
     const isSlug = isNaN(Number(categoryIdOrSlug));
 
     if (isSlug) {
       const products = await productUseCase.getByCategorySlug(
         categoryIdOrSlug,
-        name as undefined
+        name as undefined,
+        Number(page)
       );
       return res.status(200).json(products);
     }
 
     const products = await productUseCase.getByCategoryId(
       Number(categoryIdOrSlug),
-      name as undefined
+      name as undefined,
+      Number(page)
     );
     return res.status(200).json(products);
   }

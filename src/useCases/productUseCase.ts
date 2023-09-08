@@ -63,7 +63,11 @@ export default class ProductUseCase {
     return product;
   }
 
-  async getByCategoryId(categoryId: number, name: string | undefined) {
+  async getByCategoryId(
+    categoryId: number,
+    name: string | undefined,
+    page?: number
+  ) {
     if (!categoryId) throw new AppError("categoryId is required", 400);
 
     const isCategoryIdValid = await categoryModel.getById(categoryId);
@@ -73,14 +77,18 @@ export default class ProductUseCase {
     }
 
     const products = await productModel.getByCategoryId(categoryId, name);
-    return products;
+    return paginatedResults(page, products as []);
   }
 
-  async getByCategorySlug(categorySlug: string, name: string | undefined) {
+  async getByCategorySlug(
+    categorySlug: string,
+    name: string | undefined,
+    page?: number
+  ) {
     if (!categorySlug) throw new AppError("categorySlug is required", 400);
     const products = await productModel.getByCategorySlug(categorySlug, name);
     if (products === null) throw new AppError("Category not found", 404);
 
-    return products;
+    return paginatedResults(page, products as []);
   }
 }
