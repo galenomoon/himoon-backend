@@ -11,6 +11,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject,
 } from "firebase/storage";
 
 initializeApp(config.firebaseConfig);
@@ -26,18 +27,28 @@ export default class ImageUseCase {
   async getById(id?: number) {
     const image = await imageModel.getById(id);
     if (!image) throw new AppError("Image not found", 404);
+    return image;
   }
 
   async create(productId: number, image: Express.Multer.File) {
     const product = await productUseCase.getById(productId);
 
-    const storageRef = ref(storage, `products/${product.slug}`);
+    try {
+      const storageRef = ref(storage, `products/${product.slug}`);
+      const fileRef = ref(storageRef, image.originalname);
+      const uploadTask = uploadBytesResumable(fileRef, image.buffer);
+      await uploadTask;
+      const url = await getDownloadURL(uploadTask.snapshot.ref);
+      const filename = uploadTask.snapshot.ref.name;
 
-    const fileRef = ref(storageRef, image.originalname);
-    const uploadTask = uploadBytesResumable(fileRef, image.buffer);
-    await uploadTask;
-    const url = await getDownloadURL(uploadTask.snapshot.ref);
-    return await imageModel.create({ url, productId: product.id } as Image);
+      return await imageModel.create({
+        url,
+        productId: product.id,
+        filename,
+      } as Image);
+    } catch (error) {
+      throw new AppError("Error uploading image", 500);
+    }
   }
 
   async update(id: number, image: Image) {
@@ -49,7 +60,15 @@ export default class ImageUseCase {
   async delete(id: number) {
     const image = await imageModel.getById(id);
     if (!image) throw new AppError("Image not found", 404);
-    return await imageModel.delete(id);
+
+    const storageRef = ref(storage, `products/${image.product?.slug}`);
+    const fileRef = ref(storageRef, image.filename || "");
+    try {
+      await deleteObject(fileRef);
+      await imageModel.delete(id);
+    } catch (error) {
+      throw new AppError("Error deleting image", 500);
+    }
   }
 
   async getByProductId(productId: number | string) {

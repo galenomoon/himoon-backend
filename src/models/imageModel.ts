@@ -20,11 +20,12 @@ export default class ImageModel {
     });
   }
 
-  async create({ url, productId }: Image) {
+  async create({ url, productId, filename }: Image) {
     return await prisma.image.create({
       data: {
         url,
         productId,
+        filename: filename || "",
       },
     });
   }

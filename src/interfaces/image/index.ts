@@ -5,4 +5,5 @@ export interface Image {
   url: string;
   productId: number;
   product?: Product;
+  filename?: string;
 }
