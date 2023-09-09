@@ -18,10 +18,6 @@ export default class ProductUseCase {
   async create(product: Product) {
     hasAllRequiredKeys(product);
 
-    if (!Array.isArray(product.images)) {
-      throw new AppError("images must be an array");
-    }
-
     const isCategoryIdValid = await categoryModel.getById(product.categoryId);
 
     if (!isCategoryIdValid) {
@@ -61,6 +57,13 @@ export default class ProductUseCase {
     const product = await productModel.getById(id);
     if (!product) throw new AppError("Product not found", 404);
     return product;
+  }
+
+  async uploadImage(productId: number, images: Express.Multer.File[]) {
+    if (!productId) throw new AppError("productId is required", 400);
+    const product = await productModel.getById(productId);
+    if (!product) throw new AppError("Product not found", 404);
+    // PAREI AQUI, BOTA OS BANG PRA FAZE O UPLOAD NO FIREBASE AQUI!!! 
   }
 
   async getByCategoryId(

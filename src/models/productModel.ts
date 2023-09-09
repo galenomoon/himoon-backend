@@ -50,13 +50,12 @@ export default class ProductModel {
     return product;
   }
 
-  async create({ name, description, price, images, categoryId }: Product) {
+  async create({ name, description, price, categoryId }: Product) {
     const product = await prisma.product.create({
       data: {
         name,
         description,
         price,
-        images,
         categoryId,
         slug: name.toLowerCase().replace(/ /g, "-"),
       },

@@ -27,12 +27,11 @@ export default class ProductController {
   }
 
   async create(req: Request, res: Response) {
-    const { name, description, price, images, categoryId } = req.body;
+    const { name, description, price, categoryId } = req.body;
     const newProduct = await productUseCase.create({
       name,
       description,
       price,
-      images,
       categoryId,
     });
     return res.status(201).json(newProduct);
@@ -48,6 +47,19 @@ export default class ProductController {
       images,
       categoryId,
     });
+    return res.status(200).json(product);
+  }
+
+  async uploadImage(req: Request, res: Response) {
+    const { id } = req.params;
+    const files = req.files;
+
+    if (!files?.length)
+      return res.status(400).json({ error: "No file uploaded" });
+    const product = await productUseCase.uploadImage(
+      Number(id),
+      files as unknown as Express.Multer.File[]
+    );
     return res.status(200).json(product);
   }
 
