@@ -1,10 +1,31 @@
+//models
 import ProductModel from "../models/productModel";
 import CategoryModel from "../models/categoryModel";
+
+//types
 import { Product } from "../interfaces/product";
+
+//erros
 import { AppError } from "../errors/appError";
 import { hasAllRequiredKeys } from "../errors/hasAllRequiredKeys";
+
+//utils
 import { paginatedResults } from "../utils/paginatedResults";
 
+//firebase
+import { initializeApp } from "firebase/app";
+import config from "../config/firebase.config";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+
+// =======================
+
+initializeApp(config.firebaseConfig);
+const storage = getStorage();
 const productModel = new ProductModel();
 const categoryModel = new CategoryModel();
 
@@ -63,7 +84,22 @@ export default class ProductUseCase {
     if (!productId) throw new AppError("productId is required", 400);
     const product = await productModel.getById(productId);
     if (!product) throw new AppError("Product not found", 404);
-    // PAREI AQUI, BOTA OS BANG PRA FAZE O UPLOAD NO FIREBASE AQUI!!! 
+
+    const storageRef = ref(storage, `products/${product.slug}`);
+    const firebaseUpload = images.map(async (image) => {
+      const fileRef = ref(storageRef, image.originalname);
+      const uploadTask = uploadBytesResumable(fileRef, image.buffer);
+      await uploadTask;
+      const url = await getDownloadURL(uploadTask.snapshot.ref);
+      return url;
+    });
+
+    const imagesUrl = await Promise.all(firebaseUpload);
+    const updatedProduct = await productModel.update(productId, {
+      ...product,
+      images: imagesUrl,
+    });
+    return updatedProduct;
   }
 
   async getByCategoryId(
