@@ -12,6 +12,7 @@ export default class ProductModel {
         orderBy: { id: "asc" },
         include: {
           category: true,
+          images: true,
         },
         take: quantity || undefined,
       });
@@ -28,6 +29,7 @@ export default class ProductModel {
       },
       include: {
         category: true,
+        images: true,
       },
     });
 
@@ -37,7 +39,7 @@ export default class ProductModel {
   async getById(id?: number) {
     const product = await prisma.product.findUnique({
       where: { id },
-      include: { category: true },
+      include: { category: true, images: true },
     });
     return product;
   }
@@ -45,7 +47,7 @@ export default class ProductModel {
   async getBySlug(slug?: string) {
     const product = await prisma.product.findUnique({
       where: { slug },
-      include: { category: true },
+      include: { category: true, images: true },
     });
     return product;
   }
@@ -66,13 +68,10 @@ export default class ProductModel {
     return product;
   }
 
-  async update(
-    id: number,
-    { name, description, price, images, categoryId }: Product
-  ) {
+  async update(id: number, { name, description, price, categoryId }: Product) {
     const product = await prisma.product.update({
       where: { id },
-      data: { name, description, price, images, categoryId },
+      data: { name, description, price, categoryId },
     });
     return product;
   }
@@ -88,12 +87,12 @@ export default class ProductModel {
     if (!name)
       return await prisma.product.findMany({
         where: { categoryId: Number(categoryId) },
-        include: { category: true },
+        include: { category: true, images: true },
       });
 
     const products = await prisma.product.findMany({
       orderBy: { id: "asc" },
-      include: { category: true },
+      include: { category: true, images: true },
       where: {
         categoryId: Number(categoryId),
         name: {
@@ -115,7 +114,7 @@ export default class ProductModel {
     if (!name) {
       return await prisma.product.findMany({
         where: { categoryId: category.id },
-        include: { category: true },
+        include: { category: true, images: true },
       });
     }
 
@@ -127,7 +126,7 @@ export default class ProductModel {
           mode: "insensitive",
         },
       },
-      include: { category: true },
+      include: { category: true, images: true },
     });
   }
 }

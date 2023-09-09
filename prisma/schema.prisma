@@ -36,9 +36,18 @@ model Product {
   description String
   price       Float
   slug        String   @unique
-  images      String[]
+  images      Image[]
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
