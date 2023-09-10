@@ -78,6 +78,9 @@ export default class ProductModel {
 
   async delete(id: number) {
     const product = await this.getById(id);
+    await prisma.image.deleteMany({
+      where: { productId: id },
+    });
     await prisma.product.delete({ where: { id } });
     await categoryModel.updateCategoryCount(Number(product?.categoryId));
     return this.getAll();

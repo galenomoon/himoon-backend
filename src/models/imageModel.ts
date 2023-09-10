@@ -16,7 +16,7 @@ export default class ImageModel {
   async getById(id?: number) {
     return await prisma.image.findUnique({
       where: { id },
-      include: { product: true },
+      include: { product: { include: { category: true } } },
     });
   }
 

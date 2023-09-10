@@ -5,10 +5,9 @@ const prisma = new PrismaClient();
 
 export default class CategoryModel {
   async getAll(slug?: string | undefined, sortBy?: string | undefined) {
-
     if (!slug) {
       const categories = await prisma.category.findMany({
-        orderBy: { [sortBy || "id"]: "asc" }
+        orderBy: { [sortBy || "id"]: "asc" },
       });
       return categories;
     }
@@ -64,6 +63,10 @@ export default class CategoryModel {
   }
 
   async delete(id: number) {
+    await prisma.image.deleteMany({
+      where: { product: { categoryId: id } },
+    });
+
     await prisma.product.deleteMany({
       where: { categoryId: id },
     });
@@ -73,5 +76,13 @@ export default class CategoryModel {
     });
 
     return this.getAll();
+  }
+
+  async getProducts(id: number) {
+    const products = await prisma.product.findMany({
+      where: { categoryId: id },
+      include: { images: true },
+    });
+    return products;
   }
 }

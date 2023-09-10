@@ -50,19 +50,6 @@ export default class ProductController {
     return res.status(200).json(product);
   }
 
-  async uploadImage(req: Request, res: Response) {
-    const { id } = req.params;
-    const files = req.files;
-
-    if (!files?.length)
-      return res.status(400).json({ error: "No file uploaded" });
-    const product = await productUseCase.uploadImage(
-      Number(id),
-      files as unknown as Express.Multer.File[]
-    );
-    return res.status(200).json(product);
-  }
-
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     const products = await productUseCase.delete(Number(id));

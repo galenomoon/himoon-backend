@@ -15,12 +15,7 @@ import { paginatedResults } from "../utils/paginatedResults";
 //firebase
 import { initializeApp } from "firebase/app";
 import config from "../config/firebase.config";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 // =======================
 
@@ -63,6 +58,15 @@ export default class ProductUseCase {
   async delete(id: number) {
     const product = await productModel.getById(id);
     if (!product) throw new AppError("Product not found", 404);
+
+    const storageRef = ref(storage, `${product.category.id}/${product.id}`);
+    const deleteImages = product.images.map(async (image) => {
+      const fileRef = ref(storageRef, image.filename);
+      await deleteObject(fileRef);
+    });
+
+    await Promise.all(deleteImages);
+
     return await productModel.delete(id);
   }
 
@@ -78,28 +82,6 @@ export default class ProductUseCase {
     const product = await productModel.getById(id);
     if (!product) throw new AppError("Product not found", 404);
     return product;
-  }
-
-  async uploadImage(productId: number, images: Express.Multer.File[]) {
-    if (!productId) throw new AppError("productId is required", 400);
-    const product = await productModel.getById(productId);
-    if (!product) throw new AppError("Product not found", 404);
-
-    const storageRef = ref(storage, `products/${product.slug}`);
-    const firebaseUpload = images.map(async (image) => {
-      const fileRef = ref(storageRef, image.originalname);
-      const uploadTask = uploadBytesResumable(fileRef, image.buffer);
-      await uploadTask;
-      const url = await getDownloadURL(uploadTask.snapshot.ref);
-      return url;
-    });
-
-    const imagesUrl = await Promise.all(firebaseUpload);
-    const updatedProduct = await productModel.update(productId, {
-      ...product,
-      images: imagesUrl,
-    });
-    return updatedProduct;
   }
 
   async getByCategoryId(
