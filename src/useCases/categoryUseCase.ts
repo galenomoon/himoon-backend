@@ -64,8 +64,6 @@ export default class CategoryUseCase {
       }
     });
 
-    console.log({requests, products, category});
-
     try {
       await Promise.all(requests);
       return await categoryModel.delete(id);
