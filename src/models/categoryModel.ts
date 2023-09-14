@@ -1,5 +1,11 @@
+//interfaces
 import { Category } from "../interfaces/category";
+
+//prisma
 import { PrismaClient } from "@prisma/client";
+
+//helpers
+import slugParse from "../helpers/slugParse";
 
 const prisma = new PrismaClient();
 
@@ -30,7 +36,7 @@ export default class CategoryModel {
       data: {
         name,
         quantityProducts: 0,
-        slug: name.toLowerCase().replace(/ /g, "-"),
+        slug: slugParse(name),
       },
     });
     return category;
@@ -57,7 +63,7 @@ export default class CategoryModel {
   async update(id: number, { name }: Category) {
     const category = await prisma.category.update({
       where: { id },
-      data: { name },
+      data: { name, slug: slugParse(name) },
     });
     return category;
   }

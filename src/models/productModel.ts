@@ -1,6 +1,14 @@
+//interfaces
 import { Product } from "../interfaces/product";
+
+//prisma
 import { PrismaClient } from "@prisma/client";
+
+//models
 import CategoryModel from "./categoryModel";
+
+//helpers
+import slugParse from "../helpers/slugParse";
 
 const prisma = new PrismaClient();
 const categoryModel = new CategoryModel();
@@ -59,7 +67,7 @@ export default class ProductModel {
         description,
         price,
         categoryId,
-        slug: name.toLowerCase().replace(/ /g, "-"),
+        slug: slugParse(name),
       },
     });
 
@@ -71,7 +79,14 @@ export default class ProductModel {
   async update(id: number, { name, description, price, categoryId }: Product) {
     const product = await prisma.product.update({
       where: { id },
-      data: { name, description, price, categoryId },
+      data: {
+        name,
+        description,
+        price,
+        categoryId,
+        slug: slugParse(name),
+      },
+      include: { category: true, images: true },
     });
     return product;
   }

@@ -12,7 +12,7 @@ imagesRoutes.get("/", imagesController.getAll);
 imagesRoutes.get("/:id", imagesController.getById);
 imagesRoutes.post("/:productId", upload.single('image'), imagesController.create);
 imagesRoutes.put("/:id", authenticateToken, imagesController.update);
-imagesRoutes.delete("/:id", upload.single('image'), imagesController.delete);
+imagesRoutes.delete("/:id", imagesController.delete);
 
 // CUSTOM ROUTES
 imagesRoutes.get("/product/:productId", imagesController.getByProductId);

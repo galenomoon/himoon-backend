@@ -34,7 +34,10 @@ export default class ImageUseCase {
     const product = await productUseCase.getById(productId);
 
     try {
-      const storageRef = ref(storage, `/${product?.category?.id}/${product?.id}`);
+      const storageRef = ref(
+        storage,
+        `/${product?.category?.id}/${product?.id}`
+      );
       const fileRef = ref(storageRef, image.originalname);
       const uploadTask = uploadBytesResumable(fileRef, image.buffer);
       await uploadTask;
@@ -61,7 +64,10 @@ export default class ImageUseCase {
     const image = await imageModel.getById(id);
     if (!image) throw new AppError("Image not found", 404);
 
-    const storageRef = ref(storage, `/${image?.product?.category?.id}/${image?.product?.id}`);
+    const storageRef = ref(
+      storage,
+      `/${image?.product?.category?.id}/${image?.product?.id}`
+    );
     const fileRef = ref(storageRef, image.filename || "");
     try {
       await deleteObject(fileRef);
