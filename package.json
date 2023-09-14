@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./dist && tsc && prisma generate",
-    "start": "node ./dist/src/index.js",
+    "build": "tsc && prisma generate",
+    "start": "ts-node ./api/index.ts",
     "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
-    "seed": "ts-node ./src/seeds/seed.ts"
+    "seed": "ts-node ./src/seeds/seed.ts",
+    "vercel-build": "echo \"No build step required\""
   },
   "keywords": [],
   "author": "",
