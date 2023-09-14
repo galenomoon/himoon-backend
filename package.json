@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/himoon-backend/src/index.js",
+    "start": "node ./dist/src/index.js",
     "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
     "seed": "ts-node ./src/seeds/seed.ts"

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 //interfaces
-import { ICategory } from "../../../himoon-frontend/src/interfaces/category";
+import { Category } from "../interfaces/category";
 
 //mocks
 import adjectives from "../mocks/adjectives";
@@ -35,7 +35,7 @@ async function seed() {
     console.log("Seeding database...");
     await authUseCase.register({ email: "galenomoon@admin.com", password: "@Apollo11" });
 
-    let newCategories: Promise<ICategory>[] = [];
+    let newCategories: Promise<Category>[] = [];
     categories.forEach((name) => {
       const newCategory = categoryModel.create({ name });
       newCategories.push(newCategory);
