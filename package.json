@@ -8,7 +8,8 @@
     "start": "node ./dist/src/index.js",
     "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
-    "seed": "ts-node ./src/seeds/seed.ts"
+    "seed": "ts-node ./src/seeds/seed.ts",
+    "vercel-build": "npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",
