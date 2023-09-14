@@ -7,3 +7,4 @@ node_modules
 /prisma/dev.db-journal
 /dist
 .env
+.vercel
