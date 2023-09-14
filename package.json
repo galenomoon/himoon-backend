@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && prisma generate",
+    "build": "rimraf ./dist && tsc && prisma generate",
     "start": "node ./dist/src/index.js",
     "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
@@ -37,6 +37,7 @@
   "dependencies": {
     "@prisma/client": "^5.1.1",
     "firebase": "^10.3.1",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "rimraf": "^5.0.1"
   }
 }
