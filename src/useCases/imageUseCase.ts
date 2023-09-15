@@ -50,14 +50,8 @@ export default class ImageUseCase {
         filename,
       } as Image);
     } catch (error) {
-      throw new AppError("Error uploading image", 500);
+      throw new AppError(`Error uploading image: ${error}`, 500);
     }
-  }
-
-  async update(id: number, image: Image) {
-    const isImageIdValid = await imageModel.getById(id);
-    if (!isImageIdValid) throw new AppError("Image not found", 404);
-    return await imageModel.update(id, image);
   }
 
   async delete(id: number) {

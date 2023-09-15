@@ -30,10 +30,6 @@ export default class ImageModel {
     });
   }
 
-  async update(id: number, image: Image) {
-    // TO DO
-  }
-
   async delete(id: number) {
     const image = await this.getById(id);
     await prisma.image.delete({ where: { id } });

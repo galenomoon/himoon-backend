@@ -11,7 +11,6 @@ const imagesController = new ImagesController();
 imagesRoutes.get("/", imagesController.getAll);
 imagesRoutes.get("/:id", imagesController.getById);
 imagesRoutes.post("/:productId", upload.single('image'), imagesController.create);
-imagesRoutes.put("/:id", authenticateToken, imagesController.update);
 imagesRoutes.delete("/:id", imagesController.delete);
 
 // CUSTOM ROUTES

@@ -22,13 +22,6 @@ export default class ImagesController {
     res.status(201).json(imagesCreated);
   }
 
-  async update(req: Request, res: Response) {
-    const { id } = req.params;
-    const { images } = req.body;
-    const imageUpdated = await imageUseCase.update(Number(id), images);
-    res.status(200).json(imageUpdated);
-  }
-
   async delete(req: Request, res: Response) {
     const { id } = req.params;
     const imageDeleted = await imageUseCase.delete(Number(id));
